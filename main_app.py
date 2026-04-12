@@ -13,47 +13,223 @@ st.set_page_config(page_title="Credit Card Default Dashboard", layout="wide")
 
 st.markdown("""
     <style>
-    [data-testid="stSidebar"] {
-        padding-top: 20px;
-    }
-            
-    div[role="radiogroup"] {
-    width: 100%;
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+    html, body, [class*="css"], * {
+        font-family: 'Poppins', sans-serif !important;
     }
 
-    div[role="radiogroup"] > label:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* terang dikit */
-    border-radius: 10px;
-    width: full;
-    cursor: pointer;
+    /* ── MAIN BACKGROUND ── */
+    .stApp, [data-testid="stAppViewContainer"] {
+        background-color: #F2EFFF !important;
+    }
+    [data-testid="stHeader"] {
+        background-color: #F2EFFF !important;
     }
 
-    /* Menghilangkan dot/bulatan radio */
-    div[role="radiogroup"] [data-testid="stMarkdownArmchair"] {
-        display: none;
+    h1 { font-size: 3.8rem !important; font-weight: 700 !important; letter-spacing: -0.5px; line-height: 1.2 !important; }
+    h2 { font-size: 2rem !important; font-weight: 600 !important; }
+    h3 { font-size: 1.5rem !important; font-weight: 600 !important; }
+    p, li { font-size: 1.15rem !important; line-height: 1.8 !important; }
+
+    /* ── LAYOUT ── */
+    .block-container {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+        padding-left: 3.5rem !important;
+        padding-right: 3.5rem !important;
+        max-width: 100% !important;
     }
-    
-    /* Kasih padding ke tiap item menu */
-    div[role="radiogroup"] > label {
-        padding: 12px 15px;
-        margin-bottom: 5px;
-        border-radius: 10px;
+
+    /* ── SIDEBAR BACKGROUND semua lapisan ── */
+    section[data-testid="stSidebar"],
+    section[data-testid="stSidebar"] > div,
+    section[data-testid="stSidebar"] > div > div,
+    section[data-testid="stSidebar"] > div > div > div,
+    section[data-testid="stSidebar"] > div > div > div > div {
+        background-color: #C3C0FF !important;
     }
+    section[data-testid="stSidebar"] { padding-top: 1.5rem !important; }
+
+    /* ── SIDEBAR: paksa SEMUA teks gelap (sidebar terang) ── */
+    section[data-testid="stSidebar"] * {
+        color: #2d2a6e !important;
+    }
+
+    /* Judul sidebar */
+    section[data-testid="stSidebar"] h1,
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3,
+    section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] {
+        color: #1e1a5e !important;
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+    }
+
+    section[data-testid="stSidebar"] hr {
+        border-color: rgba(79,70,229,0.25) !important;
+        margin: 0.75rem 0 1rem 0 !important;
+    }
+
+    /* ── COLLAPSE BUTTON ── */
+    [data-testid="stSidebarCollapseButton"] {
+        position: absolute !important;
+        top: 1rem !important;
+        right: -1rem !important;
+    }
+
+    [data-testid="stSidebarCollapseButton"] button {
+        background-color: #a5b4fc !important;
+        border: 1px solid rgba(79,70,229,0.3) !important;
+        border-radius: 50% !important;
+        width: 32px !important;
+        height: 32px !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: background 0.15s !important;
+    }
+
+    [data-testid="stSidebarCollapseButton"] button:hover {
+        background-color: #4F46E5 !important;
+    }
+
+    [data-testid="stSidebarCollapseButton"] span,
+    [data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"] {
+        color: #1e1a5e !important;
+        font-size: 18px !important;
+    }
+
+    [data-testid="stSidebarHeader"] {
+        background-color: #C3C0FF !important;
+        padding: 0.75rem 0 !important;
+        min-height: 48px !important;
+    }
+
+    /* ── SIDEBAR: hapus semua padding container bawaan ── */
+    section[data-testid="stSidebar"] > div:first-child {
+        padding: 1.5rem 0 0 0 !important;
+    }
+
+    /* judul & hr tetap punya padding sendiri */
+    section[data-testid="stSidebar"] .stMarkdown,
+    section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+
+    /* container stRadio juga nol padding */
+    section[data-testid="stSidebar"] [data-testid="stRadio"],
+    section[data-testid="stSidebar"] .stRadio,
+    section[data-testid="stSidebar"] [data-testid="stRadio"] > div,
+    section[data-testid="stSidebar"] [data-testid="stElementContainer"] {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    /* ── RADIO GROUP wrapper ── */
+    section[data-testid="stSidebar"] div[role="radiogroup"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* tiap item label mentok full width */
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 16px 1.5rem !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        font-size: 1.15rem !important;
+        font-weight: 500 !important;
+        color: #3730a3 !important;
+        background: transparent !important;
+        border: none !important;
+        border-left: 4px solid transparent !important;
+        transition: background 0.15s, color 0.15s;
+        cursor: pointer;
+    }
+
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
+        background-color: rgba(79,70,229,0.12) !important;
+        color: #1e1a5e !important;
+    }
+
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) {
+        background-color: rgba(79,70,229,0.22) !important;
+        color: #1e1a5e !important;
+        font-weight: 700 !important;
+        border-left: 4px solid #4F46E5 !important;
+    }
+
+    /* sembunyikan radio dot */
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label > div:first-child {
+        display: none !important;
+    }
+
+    /* teks di dalam label */
+    section[data-testid="stSidebar"] div[role="radiogroup"] p {
+        font-size: 1.15rem !important;
+        font-weight: inherit !important;
+        color: inherit !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+    }
+
+    /* ── BUTTONS ── */
+    .stButton > button {
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 1.05rem !important;
+        font-weight: 600 !important;
+        padding: 0.7rem 2rem !important;
+        border-radius: 10px !important;
+        border: none !important;
+        background-color: #4F46E5 !important;
+        color: white !important;
+        transition: all 0.15s ease !important;
+    }
+    .stButton > button:hover {
+        background-color: #3730a3 !important;
+        transform: translateY(-1px);
+    }
+
+    .stSelectbox label, .stSlider label,
+    .stNumberInput label, .stCheckbox label {
+        font-size: 1.05rem !important;
+        font-weight: 500 !important;
+    }
+
+    .stDataFrame { border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; }
+    .stAlert { border-radius: 10px !important; font-size: 1.05rem !important; }
     </style>
     """, unsafe_allow_html=True)
 
-st.sidebar.title("Menu Utama")
-st.sidebar.markdown("-----")
-menu = st.sidebar.radio( 
+st.sidebar.markdown(
+    '<div style="padding: 0 1.25rem 0.5rem 1.25rem; font-family: Poppins, sans-serif; font-size: 1.4rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.3px;">Menu Utama</div>',
+    unsafe_allow_html=True
+)
+st.sidebar.markdown(
+    '<hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 0 0 0.5rem 0;" />',
+    unsafe_allow_html=True
+)
+menu = st.sidebar.radio(
     "",
-    ["🏠 Home", "📊 Dataset & EDA", "⚙️ Preprocessing", "🧠 Training Model", "🎯 Prediction Demo"])
+    ["Home", "Dataset & EDA", "Preprocessing", "Training Model", "Prediction Demo"])
 
 @st.cache_data
 def load_raw_data():
     df = pd.read_csv('default of credit card clients.csv', sep=';', header=1)
     return df
 
-# Helper to format data based on original notebook
 @st.cache_data
 def load_cleaned_data():
     df = load_raw_data().copy()
@@ -72,7 +248,7 @@ df_raw = load_raw_data()
 duplicate, df_clean = load_cleaned_data()
 
 
-if menu == "🏠 Home":
+if menu == "Home":
     st.title("Selamat Datang di Project Machine Learning")
     st.write("""
     Aplikasi ini digunakan untuk memprediksi apakah nasabah kartu kredit akan gagal bayar bulan depan (Default Payment).
@@ -81,14 +257,14 @@ if menu == "🏠 Home":
     Dashboard ini dibuat agar proses _Machine Learning_ dari dataset ini dapat lebih interaktif untuk dieksplorasi.
     
     **Gunakan Sidebar untuk Navigasi ke Halaman lain:**
-    - 📊 **Dataset & EDA**: Melihat deskripsi dan visualisasi data
-    - ⚙️ **Preprocessing**: Proses pembersihan data dan Train-Test split
-    - 🧠 **Training Model**: Melatih model dengan parameter yang dapat dikustomisasi
-    - 🎯 **Prediction Demo**: Simulasi prediksi dari data input baru
+    - **Dataset & EDA**: Melihat deskripsi dan visualisasi data
+    - **Preprocessing**: Proses pembersihan data dan Train-Test split
+    - **Training Model**: Melatih model dengan parameter yang dapat dikustomisasi
+    - **Prediction Demo**: Simulasi prediksi dari data input baru
     """)
     st.image("https://via.placeholder.com/800x400.png?text=Credit+Card+Default+Analysis", use_column_width=True)
 
-elif menu == "📊 Dataset & EDA":
+elif menu == "Dataset & EDA":
     st.title("Dataset & Exploratory Data Analysis (EDA)")
     
     st.subheader("Data Overview (Raw Data)")
@@ -125,7 +301,7 @@ elif menu == "📊 Dataset & EDA":
         
     st.pyplot(fig)
 
-elif menu == "⚙️ Preprocessing":
+elif menu == "Preprocessing":
     st.title("Data Preprocessing")
     st.write("Pada tahap ini kita akan mempersiapkan data sebelum dimasukkan ke model prediksi.")
     
@@ -151,12 +327,10 @@ elif menu == "⚙️ Preprocessing":
         X = df_clean.drop("default", axis=1)
         y = df_clean["default"]
         
-        # Split
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=(test_size/100.0), random_state=42, shuffle=shuffle_data
         )
         
-        # Scale
         if scaler_choice == "StandardScaler":
             scaler = StandardScaler()
         else:
@@ -165,7 +339,6 @@ elif menu == "⚙️ Preprocessing":
         X_train_scaled = scaler.fit_transform(X_train)
         X_test_scaled = scaler.transform(X_test)
         
-        # Simpan ke session_state agar bisa digunakan di menu Training
         st.session_state['X_train_scaled'] = X_train_scaled
         st.session_state['X_test_scaled'] = X_test_scaled
         st.session_state['y_train'] = y_train
@@ -177,11 +350,11 @@ elif menu == "⚙️ Preprocessing":
         st.write("Preview X_train Scaled:")
         st.dataframe(pd.DataFrame(X_train_scaled, columns=X.columns).head())
 
-elif menu == "🧠 Training Model":
+elif menu == "Training Model":
     st.title("Training Model Machine Learning")
     
     if 'X_train_scaled' not in st.session_state:
-        st.warning("Silakan ke menu ⚙️ Preprocessing terlebih dahulu lalu tekan 'Proses Data'.")
+        st.warning("Silakan ke menu Preprocessing terlebih dahulu lalu tekan 'Proses Data'.")
     else:
         st.write("Kita akan melatih model **Logistic Regression**.")
         
@@ -206,8 +379,6 @@ elif menu == "🧠 Training Model":
                 y_pred = model.predict(X_test)
                 
                 acc = accuracy_score(y_test, y_pred)
-                
-                # Simpan model sementara
                 st.session_state['trained_model'] = model
                 
                 st.success(f"Training Selesai! Accuracy: **{acc*100:.2f}%**")
@@ -225,7 +396,7 @@ elif menu == "🧠 Training Model":
                     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax_cm)
                     st.pyplot(fig_cm)
 
-elif menu == "🎯 Prediction Demo":
+elif menu == "Prediction Demo":
     st.title("Prediction Demo (Result)")
     st.write("Gunakan form di bawah ini untuk mensimulasikan apakah data input profil custom ini akan Default atau tidak.")
     
@@ -233,11 +404,8 @@ elif menu == "🎯 Prediction Demo":
         try:
             model = joblib.load('logistic_model.pkl')
             scaler = StandardScaler()
-            
-            # Khusus untuk model notebook, perlukan fit dummy biar scaler bisa transform
             X = df_clean.drop("default", axis=1)
             scaler.fit(X)
-            
             st.success("Loaded model dari logistic_model.pkl !")
         except:
             st.error("Model logistic_model.pkl tidak ditemukan!")
